@@ -54,7 +54,7 @@
 	},
 	"dependencies": {
 		"extract-zip": "^1.6.7",
-		"fs-extra": "^5.0.0",
+		"fs-extra": "^8.1.0",
 		"ncp": "^2.0.0"
 	}
 }
