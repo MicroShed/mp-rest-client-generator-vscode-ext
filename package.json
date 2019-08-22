@@ -1,5 +1,5 @@
 {
-	"name": "mp-starter-vscode-ext",
+	"name": "mp-rest-client-generator-vscode-ext",
 	"displayName": "MicroProfile Generator Extension",
 	"description": "VS Code extension to generate a MicroProfile Rest Client from the openapi-generator",
 	"version": "0.0.1",
