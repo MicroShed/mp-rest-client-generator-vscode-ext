@@ -8,8 +8,8 @@ The extension takes in 3 parameters.
 3. `src` directory of project to generate into
 
 ## Installing the Extension
-- download the latest `mp-rest-client-generator-vscode-ext-0.0.x.vsix` file from [releases](https://github.com/dev-tools-for-enterprise-java/mp-rest-client-generator-vscode-ext/releases)
-- from VS Code select `Install from vsix...` and select the `mp-rest-client-generator-vscode-ext-0.0.x.vsix` file
+- download the latest `mp-rest-client-generator-vscode-ext-0.x.vsix` file from [releases](https://github.com/MicroShed/mp-rest-client-generator-vscode-ext/releases)
+- from VS Code select `Install from vsix...` and select the `mp-rest-client-generator-vscode-ext-0.x.vsix` file
 
 ### Start the extension in debug mode
 - Open this example in VS Code 1.25+

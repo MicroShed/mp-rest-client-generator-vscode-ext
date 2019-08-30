@@ -2,13 +2,13 @@
 	"name": "mp-rest-client-generator-vscode-ext",
 	"displayName": "MicroProfile Generator Extension",
 	"description": "VS Code extension to generate a MicroProfile Rest Client from the openapi-generator",
-	"version": "0.0.1",
-	"publisher": "IBM",
+	"version": "0.1",
+	"publisher": "MicroShed",
 	"license": "EPL-2.0",
 	"preview": true,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/dev-tools-for-enterprise-java/mp-rest-client-generator-vscode-ext"
+		"url": "https://github.com/MicroShed/mp-rest-client-generator-vscode-ext"
 	},
 	"engines": {
 		"vscode": "^1.30.0"
