@@ -103,10 +103,10 @@ export async function generateProject(fileUri): Promise<void> {
         }
 
         vscode.window.withProgress( // run the command with a "progress" dialog
-			{
-				location: vscode.ProgressLocation.Notification,
-				title: "Generating the MicroProfile Rest Client interface template..."
-			}, async () => {
+		    {
+		        location: vscode.ProgressLocation.Notification,
+		        title: "Generating the MicroProfile Rest Client interface template..."
+		    }, async () => {
                 return new Promise((resolve) => {
                     runCommands(commands, this.srcDir, this.packagePath, function (err, results, srcDir, packagePath) {
                         if (!err) {
@@ -152,8 +152,8 @@ export async function generateProject(fileUri): Promise<void> {
                         }
                     });
                 });
-			}
-		);
+		    }
+	    );
     }
 }
 
