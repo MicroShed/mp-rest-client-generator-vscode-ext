@@ -40,9 +40,9 @@ export async function getPackageName(srcDir: string, pathSep: string): Promise<s
     // looking for "/java/" from the path
     var index = srcDir.toLowerCase().indexOf(pathSep + "java" + pathSep);
     let defaultPackageName: string;
-    if (index > -1) {
+    if (index > -1) {  // use everything after the "/java/" to be the package name
         index = index + 6;
-        defaultPackageName = srcDir.substring(index).replace(pathSep, "."); // use everything after the "/java/" to be the package name
+        defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + pathSep, "g"), ".");
     }
     
     var exp = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/;   // validate the package name

@@ -68,7 +68,7 @@ export async function generateProject(fileUri): Promise<void> {
 
     if (this.package !== undefined && this.yamlFile !== undefined && this.srcDir !== undefined && this.assumeChoice !== undefined) {
         // Call MicroProfile generator
-        this.packagePath = this.package.replace(".", path.sep);
+        this.packagePath = this.package.replace(/\./g, path.sep);
         var commands = [];
         var jarPath = __dirname + '/../openapi-generator-cli.jar';
 
@@ -112,7 +112,7 @@ export async function generateProject(fileUri): Promise<void> {
                         if (!err) {
                             try {
                                 let generatedPath = path.resolve(srcDir, 'src', 'main', 'java', packagePath);
-            
+
                                 // move models and apis folders to srcDir
                                 var ncp = require('ncp').ncp;
                                 ncp(generatedPath, srcDir, function (err) {
