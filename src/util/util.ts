@@ -36,11 +36,28 @@ export async function specifyTargetFolder(uri: vscode.Uri): Promise<vscode.Uri> 
     return fileUri;
 }
 
-export function getPackagePath(srcDir: string): string {
-    var index = srcDir.indexOf("java");
-    index = index + 5;
-    var packageName = srcDir.substring(index);
-    return packageName;
+export async function getPackageName(srcDir: string, pathSep: string): Promise<string> {
+    // looking for "/java/" from the path
+    var index = srcDir.toLowerCase().indexOf(pathSep + "java" + pathSep);
+    let defaultPackageName: string;
+    if (index > -1) {  // use everything after the "/java/" to be the package name
+        index = index + 6;
+        defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + pathSep, "g"), ".");
+    }
+    
+    var exp = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/;   // validate the package name
+    return await getFromInputBox({
+        placeHolder: "e.g. com.example",
+        prompt: "Input package name for your project",
+        validateInput: (value: string) => {
+            if (exp.test(value) === false) {
+                return "Invalid package name";
+            } else {
+                return null;
+            }
+        },
+        value: defaultPackageName,
+    });
 }
 
 async function openDialogForFile(customOptions?: vscode.OpenDialogOptions): Promise<vscode.Uri> {
