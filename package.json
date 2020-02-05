@@ -40,7 +40,7 @@
     "commands": [
       {
         "command": "microprofile.restclient.generate",
-        "title": "Generate MicroProfile Rest Client",
+        "title": "Generate a MicroProfile Rest Client",
         "category": "MicroProfile"
       }
     ],
