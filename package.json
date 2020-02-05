@@ -1,60 +1,75 @@
 {
-	"name": "mp-rest-client-generator-vscode-ext",
-	"displayName": "MicroProfile Generator Extension",
-	"description": "VS Code extension to generate a MicroProfile Rest Client from the openapi-generator",
-	"version": "0.0.1",
-	"publisher": "IBM",
-	"license": "EPL-2.0",
-	"preview": true,
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dev-tools-for-enterprise-java/mp-rest-client-generator-vscode-ext"
-	},
-	"engines": {
-		"vscode": "^1.30.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"icon": "images/microprofile-logo.png",
-	"activationEvents": [
-		"onCommand:microprofile.restclient.generate"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "microprofile.restclient.generate",
-				"title": "Generate MicroProfile Rest Client",
-				"category": "MicroProfile"
-			}
-		],
-		"menus": {
-			"explorer/context": [
-				{
-					"command": "microprofile.restclient.generate",
-					"group": "microprofile"
-				}
-			]
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^3.1.4",
-		"vscode": "^1.1.25",
-		"tslint": "^5.8.0",
-		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
-	},
-	"dependencies": {
-		"extract-zip": "^1.6.7",
-		"fs-extra": "^8.1.0",
-		"ncp": "^2.0.0"
-	}
+  "name": "mp-rest-client-generator-vscode-ext",
+  "displayName": "MicroProfile Rest Client Generator",
+  "description": "Generate a Java MicroProfile Rest Client using the OpenAPI Generator",
+  "version": "0.1.0",
+  "publisher": "MicroProfile-Community",
+  "license": "EPL-2.0",
+  "preview": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MicroShed/mp-rest-client-generator-vscode-ext"
+  },
+  "engines": {
+    "vscode": "^1.30.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "Eclipse",
+    "Java",
+    "MicroProfile",
+    "Cloud Native",
+    "Microservices"
+  ],
+  "icon": "images/microprofile-logo.png",
+  "galleryBanner": {
+    "color": "#1d2f42",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/MicroShed/mp-rest-client-generator-vscode-ext/README.md",
+  "bugs": {
+    "url": "https://github.com/MicroShed/mp-rest-client-generator-vscode-ext/issues"
+  },
+  "activationEvents": [
+    "onCommand:microprofile.restclient.generate"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "microprofile.restclient.generate",
+        "title": "Generate a MicroProfile Rest Client",
+        "category": "MicroProfile"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "microprofile.restclient.generate",
+          "group": "microprofile"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^3.1.4",
+    "vscode": "^1.1.25",
+    "tslint": "^5.8.0",
+    "@types/node": "^8.10.25",
+    "@types/mocha": "^2.2.42"
+  },
+  "dependencies": {
+    "extract-zip": "^1.6.7",
+    "fs-extra": "^8.1.0",
+    "ncp": "^2.0.0"
+  }
 }
