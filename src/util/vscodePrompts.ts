@@ -16,8 +16,8 @@ async function askForFile(
     canSelectMany: false,
     ...customOptions,
   };
-  const result: vscode.Uri[] | undefined = await vscode.window.showOpenDialog(options);
 
+  const result = await vscode.window.showOpenDialog(options);
   if (result && result.length > 0) {
     return result[0];
   }
@@ -25,7 +25,7 @@ async function askForFile(
   return undefined;
 }
 
-export async function askForFolder(
+async function askForFolder(
   customOptions: vscode.OpenDialogOptions
 ): Promise<vscode.Uri | undefined> {
   const options: vscode.OpenDialogOptions = {
@@ -34,7 +34,8 @@ export async function askForFolder(
     canSelectMany: false,
     ...customOptions,
   };
-  const result: vscode.Uri[] | undefined = await vscode.window.showOpenDialog(options);
+
+  const result = await vscode.window.showOpenDialog(options);
   if (result && result.length > 0) {
     return result[0];
   }
@@ -42,7 +43,7 @@ export async function askForFolder(
   return undefined;
 }
 
-export async function specifyYamlInputMethod(): Promise<string | undefined> {
+export async function askForYamlInputMethod(): Promise<string | undefined> {
   const defaultYamlChoice = vscode.workspace
     .getConfiguration(EXTENSION_CONFIGURATION_IDENTIFIER)
     .get<string>(DEFAULT_YAML_CHOICE_IDENTIFIER);
@@ -57,13 +58,13 @@ export async function specifyYamlInputMethod(): Promise<string | undefined> {
   });
 }
 
-export async function specifyYamlFile(): Promise<vscode.Uri | undefined> {
+export async function askForYamlFile(): Promise<vscode.Uri | undefined> {
   return askForFile({
     openLabel: "Generate from this file",
   });
 }
 
-export async function specifyYamlURL(): Promise<string | undefined> {
+export async function askForYamlURL(): Promise<string | undefined> {
   const defaultYamlPath = vscode.workspace
     .getConfiguration(EXTENSION_CONFIGURATION_IDENTIFIER)
     .get<string>(DEFAULT_YAML_PATH_IDENTIFIER);
@@ -76,16 +77,14 @@ export async function specifyYamlURL(): Promise<string | undefined> {
   });
 }
 
-export async function specifyTargetFolder(
-  defaultUri?: vscode.Uri
-): Promise<vscode.Uri | undefined> {
+export async function askForTargetFolder(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
   return askForFolder({
     openLabel: "Generate into this package",
     defaultUri: defaultUri,
   });
 }
 
-export async function specifyPackageName(srcDir: string): Promise<string | undefined> {
+export async function askForPackageName(srcDir: string): Promise<string | undefined> {
   // looking for "/java/" from the path
   let index = srcDir.toLowerCase().indexOf(path.sep + "java" + path.sep);
   let defaultPackageName: string | undefined;
@@ -95,7 +94,7 @@ export async function specifyPackageName(srcDir: string): Promise<string | undef
     defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
   }
 
-  const packageNameRegex = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/; // validate the package name
+  const packageNameRegex = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/; // used to validate the package name
   return await vscode.window.showInputBox({
     placeHolder: "e.g. com.example",
     prompt: "Input package name for your project",

@@ -33,12 +33,12 @@ export async function downloadFile(
   });
 }
 
-const exists = promisify(fs.exists);
-const mkdir = promisify(fs.mkdir);
+export const exists = promisify(fs.exists);
 
-export async function makeDirectory(dir: string): Promise<void> {
+const _mkdir = promisify(fs.mkdir);
+export async function mkdir(dir: string): Promise<void> {
   if (!(await exists(dir))) {
-    await mkdir(dir);
+    await _mkdir(dir);
   }
 }
 
@@ -49,20 +49,10 @@ export async function generateTempDirectory(dir: string): Promise<string> {
     .substr(2, 5);
   const tempDirName = `tmp-${randomSuffix}`;
   const fullTempDirPath = path.join(dir, tempDirName);
-  await makeDirectory(fullTempDirPath);
+  await mkdir(fullTempDirPath);
   return fullTempDirPath;
 }
 
-export function copy(source: string, dest: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    ncp(source, dest, function(err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
+export const copy = promisify(ncp);
 
 export const deleteDirectory = promisify(fsExtra.remove);
