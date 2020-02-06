@@ -64,8 +64,14 @@
     "typescript": "^3.1.4",
     "vscode": "^1.1.25",
     "tslint": "^5.8.0",
-    "@types/node": "^8.10.25",
-    "@types/mocha": "^2.2.42"
+    "@types/node": "^10.12.21",
+    "@types/mocha": "^2.2.42",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1"
   },
   "dependencies": {
     "extract-zip": "^1.6.7",
