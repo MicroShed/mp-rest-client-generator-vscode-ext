@@ -1,11 +1,14 @@
 import * as vscode from "vscode";
-import { generateProject } from "./util/GenerateProject";
+import { generateProject } from "./commands/generateProject";
 
 export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand("microprofile.restclient.generate", fileUri => {
-      generateProject(fileUri);
-    })
+    vscode.commands.registerCommand(
+      "microprofile.restclient.generate",
+      (fileUri: vscode.Uri | undefined) => {
+        generateProject(fileUri);
+      }
+    )
   );
 }
 
