@@ -97,7 +97,12 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   } finally {
     // remove the tmp directory after if it exists
     if (tmpDirPath !== undefined && (await fileUtil.exists(tmpDirPath))) {
-      await fileUtil.deleteDirectory(tmpDirPath);
+      try {
+        await fileUtil.deleteDirectory(tmpDirPath);
+      } catch (e) {
+        console.error(e);
+        vscode.window.showErrorMessage(`Failed to delete the directory ${tmpDirPath}`);
+      }
     }
   }
 }
