@@ -54,8 +54,6 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       yamlInputFileURI = vscode.Uri.parse(downloadLocation);
     }
 
-    // the input file URI should now exist. Either by specifying the URI directly
-    // or giving a URL and then downloading the file into the tmp directory
     if (yamlInputFileURI === undefined) {
       return;
     }
@@ -76,13 +74,23 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       packageName +
       ".models";
 
-    await processUtil.exec(jarCommand);
+    await vscode.window.withProgress(
+      // run the command with a "progress" dialog
+      {
+        location: vscode.ProgressLocation.Notification,
+        title: "Generating the MicroProfile Rest Client interface template...",
+      },
+      () => processUtil.exec(jarCommand)
+    );
 
     const packagePath = packageName.replace(/\./g, path.sep);
     const generatedRestClientPath = path.resolve(tmpDirPath, "src", "main", "java", packagePath);
 
     // copy the api/models folder from the generated directory into the target directory
     await fileUtil.copy(generatedRestClientPath, targetDirectory.fsPath);
+    await vscode.window.showInformationMessage(
+      "Successfully generated a MicroProfile Rest Client interface template."
+    );
   } catch (e) {
     console.error(e);
     await vscode.window.showErrorMessage("Failed to generate MicroProfile rest client");
