@@ -4,6 +4,7 @@ import * as prompts from "../util/vscodePrompts";
 import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH } from "../constants";
 import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
+import { getWorkspaceFolderIfExists } from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
@@ -16,7 +17,8 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     let yamlInputURL: string | undefined;
 
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_FILE) {
-      yamlInputFileURI = await prompts.askForYamlFile();
+      const defaultURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolderIfExists();
+      yamlInputFileURI = await prompts.askForYamlFile(defaultURI);
     } else if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
       yamlInputURL = await prompts.askForYamlURL();
     }

@@ -1,11 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import {
-  INPUT_YAML_OPTIONS,
-  EXTENSION_CONFIGURATION_IDENTIFIER,
-  DEFAULT_YAML_CHOICE_IDENTIFIER,
-  DEFAULT_YAML_PATH_IDENTIFIER,
-} from "../constants";
+import { INPUT_YAML_OPTIONS } from "../constants";
 
 async function askForFile(
   customOptions?: vscode.OpenDialogOptions
@@ -44,36 +39,24 @@ async function askForFolder(
 }
 
 export async function askForYamlInputMethod(): Promise<string | undefined> {
-  const defaultYamlChoice = vscode.workspace
-    .getConfiguration(EXTENSION_CONFIGURATION_IDENTIFIER)
-    .get<string>(DEFAULT_YAML_CHOICE_IDENTIFIER);
-
-  if (defaultYamlChoice) {
-    return defaultYamlChoice;
-  }
-
   return vscode.window.showQuickPick([INPUT_YAML_OPTIONS.FROM_FILE, INPUT_YAML_OPTIONS.FROM_URL], {
     ignoreFocusOut: true,
     placeHolder: "Select one of the following choices.",
   });
 }
 
-export async function askForYamlFile(): Promise<vscode.Uri | undefined> {
+export async function askForYamlFile(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
   return askForFile({
     openLabel: "Generate from this file",
+    defaultUri: defaultUri,
   });
 }
 
 export async function askForYamlURL(): Promise<string | undefined> {
-  const defaultYamlPath = vscode.workspace
-    .getConfiguration(EXTENSION_CONFIGURATION_IDENTIFIER)
-    .get<string>(DEFAULT_YAML_PATH_IDENTIFIER);
-
   return vscode.window.showInputBox({
     placeHolder: "e.g. com.example",
     prompt: "Input yaml path for your project",
     ignoreFocusOut: true,
-    value: defaultYamlPath,
   });
 }
 
