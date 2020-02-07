@@ -12,6 +12,5 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 }
 
-// this method is called when your extension is deactivated
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function deactivate(): void {}

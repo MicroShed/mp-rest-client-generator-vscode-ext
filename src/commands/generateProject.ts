@@ -6,7 +6,7 @@ import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
-  // extension uses a tmp directory to download / generate files
+  // extension uses a tmp directory to download / generate files into
   let tmpDirPath: string | undefined;
 
   try {
@@ -21,14 +21,14 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       yamlInputURL = await prompts.askForYamlURL();
     }
 
-    // if neither an input file URI or input URL are specified exit the generator
+    // if neither an input file or input URL are specified exit the generator
     if (yamlInputFileURI === undefined && yamlInputURL === undefined) {
       return;
     }
 
     // ask for a folder to generate rest client into
     // use the fileURI clicked on by the user as the default if
-    // the command was triggered from the file explorer and not the command palette
+    // the command was triggered from the file explorer
     const targetDirectory = await prompts.askForTargetFolder(clickedFileUri);
     if (targetDirectory === undefined) {
       return;
@@ -45,7 +45,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     // if they are using a URL download the file to the temp directory
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
       const requestOptions = {
-        // yamlInput must exist if input time is URL
+        // yamlInputURL must exist if input method is FROM_URL
         url: yamlInputURL!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
         method: "GET",
       };
@@ -74,8 +74,8 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       packageName +
       ".models";
 
+    // run the generator command with a "progress" dialog
     await vscode.window.withProgress(
-      // run the command with a "progress" dialog
       {
         location: vscode.ProgressLocation.Notification,
         title: "Generating the MicroProfile Rest Client interface template...",
@@ -88,12 +88,12 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
     // copy the api/models folder from the generated directory into the target directory
     await fileUtil.copy(generatedRestClientPath, targetDirectory.fsPath);
-    await vscode.window.showInformationMessage(
+    vscode.window.showInformationMessage(
       "Successfully generated a MicroProfile Rest Client interface template."
     );
   } catch (e) {
     console.error(e);
-    await vscode.window.showErrorMessage("Failed to generate MicroProfile rest client");
+    vscode.window.showErrorMessage("Failed to generate MicroProfile rest client");
   } finally {
     // remove the tmp directory after if it exists
     if (tmpDirPath !== undefined && (await fileUtil.exists(tmpDirPath))) {
