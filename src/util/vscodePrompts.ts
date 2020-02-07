@@ -100,7 +100,8 @@ export async function askForPackageName(srcDir: string): Promise<string | undefi
     prompt: "Input package name for your project",
     ignoreFocusOut: true,
     validateInput: (value: string) => {
-      if (packageNameRegex.test(value) === false) {
+      // allow no package name or a valid java package name
+      if (value !== "" && packageNameRegex.test(value) === false) {
         return "Invalid package name";
       } else {
         return null;

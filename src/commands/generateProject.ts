@@ -58,6 +58,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
+    // add .api /.models to package name or just use package api package models
+    // if no package name was provided
+    const apiPackageName = packageName !== "" ? `${packageName}.api` : "api";
+    const modelPackageName = packageName !== "" ? `${packageName}.models` : "models";
+
     // execute generator in temp dir
     const jarCommand =
       "java -jar " +
@@ -69,11 +74,9 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       " -g java --library microprofile -o " +
       tmpDirPath +
       " --api-package " +
-      packageName +
-      ".api --model-package " +
-      packageName +
-      ".models";
-
+      apiPackageName +
+      " --model-package " +
+      modelPackageName;
     // run the generator command with a "progress" dialog
     await vscode.window.withProgress(
       {
