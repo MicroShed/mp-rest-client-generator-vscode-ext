@@ -10,6 +10,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   // extension uses a tmp directory to download / generate files into
   let tmpDirPath: string | undefined;
 
+  // default URI to use when presenting the user a file picker
+  // ie. when asking for yaml file or target folder to generate rest client into
+  const defaultFilePickerURI =
+    clickedFileUri != null ? clickedFileUri : getWorkspaceFolderIfExists();
+
   try {
     const inputYamlMethod = await prompts.askForYamlInputMethod();
 
@@ -17,8 +22,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     let yamlInputURL: string | undefined;
 
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_FILE) {
-      const defaultURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolderIfExists();
-      yamlInputFileURI = await prompts.askForYamlFile(defaultURI);
+      yamlInputFileURI = await prompts.askForYamlFile(defaultFilePickerURI);
     } else if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
       yamlInputURL = await prompts.askForYamlURL();
     }
@@ -31,7 +35,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     // ask for a folder to generate rest client into
     // use the fileURI clicked on by the user as the default if
     // the command was triggered from the file explorer
-    const targetDirectory = await prompts.askForTargetFolder(clickedFileUri);
+    const targetDirectory = await prompts.askForTargetFolder(defaultFilePickerURI);
     if (targetDirectory === undefined) {
       return;
     }
