@@ -16,7 +16,9 @@ export function getPackageName(srcDir: string): string {
   if (index > -1) {
     // use everything after the "/java/" to be the package name
     index = index + 6;
-    return defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
+    return (defaultPackageName = srcDir
+      .substring(index)
+      .replace(new RegExp("\\" + path.sep, "g"), "."));
   }
   return defaultPackageName;
 }
