@@ -4,7 +4,7 @@ import * as prompts from "../util/vscodePrompts";
 import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH } from "../constants";
 import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
-import { getWorkspaceFolderIfExists } from "../util/workspace";
+import { getWorkspaceFolderIfExists, getPackageName} from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
@@ -40,10 +40,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
-    const packageName = await prompts.askForPackageName(targetDirectory.fsPath);
-    if (packageName === undefined) {
-      return;
-    }
+    const packageName = getPackageName(targetDirectory.fsPath);
 
     // make a tmp directory in the target folder to generate files into
     tmpDirPath = await fileUtil.generateTempDirectory(targetDirectory.fsPath);
