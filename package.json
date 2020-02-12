@@ -11,7 +11,7 @@
     "url": "https://github.com/MicroShed/mp-rest-client-generator-vscode-ext"
   },
   "engines": {
-    "vscode": "^1.30.0"
+    "vscode": "^1.42.0"
   },
   "categories": [
     "Programming Languages"
