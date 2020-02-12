@@ -4,7 +4,7 @@ import * as prompts from "../util/vscodePrompts";
 import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH } from "../constants";
 import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
-import { getWorkspaceFolderIfExists, getPackageName} from "../util/workspace";
+import { getWorkspaceFolderIfExists, getPackageName } from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
