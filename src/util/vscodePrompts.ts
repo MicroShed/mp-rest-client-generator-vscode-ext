@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as path from "path";
 import { INPUT_YAML_OPTIONS } from "../constants";
 
 async function askForFile(
@@ -64,32 +63,5 @@ export async function askForTargetFolder(defaultUri?: vscode.Uri): Promise<vscod
   return askForFolder({
     openLabel: "Generate into this package",
     defaultUri: defaultUri,
-  });
-}
-
-export async function askForPackageName(srcDir: string): Promise<string | undefined> {
-  // looking for "/java/" from the path
-  let index = srcDir.toLowerCase().indexOf(path.sep + "java" + path.sep);
-  let defaultPackageName: string | undefined;
-  if (index > -1) {
-    // use everything after the "/java/" to be the package name
-    index = index + 6;
-    defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
-  }
-
-  const packageNameRegex = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/; // used to validate the package name
-  return await vscode.window.showInputBox({
-    placeHolder: "e.g. com.example",
-    prompt: "Input package name for your project",
-    ignoreFocusOut: true,
-    validateInput: (value: string) => {
-      // allow no package name or a valid java package name
-      if (value !== "" && packageNameRegex.test(value) === false) {
-        return "Invalid package name";
-      } else {
-        return null;
-      }
-    },
-    value: defaultPackageName,
   });
 }
