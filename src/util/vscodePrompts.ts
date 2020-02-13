@@ -40,7 +40,7 @@ async function askForFolder(
 export async function askForYamlInputMethod(): Promise<string | undefined> {
   return vscode.window.showQuickPick([INPUT_YAML_OPTIONS.FROM_FILE, INPUT_YAML_OPTIONS.FROM_URL], {
     ignoreFocusOut: true,
-    placeHolder: "Select one of the following choices.",
+    placeHolder: "Select a method of providing a yaml file.",
   });
 }
 
@@ -53,7 +53,7 @@ export async function askForYamlFile(defaultUri?: vscode.Uri): Promise<vscode.Ur
 
 export async function askForYamlURL(): Promise<string | undefined> {
   return vscode.window.showInputBox({
-    placeHolder: "e.g. com.example",
+    placeHolder: "e.g. http://www.example.com/openapi.yaml",
     prompt: "Input yaml path for your project",
     ignoreFocusOut: true,
   });
@@ -61,7 +61,7 @@ export async function askForYamlURL(): Promise<string | undefined> {
 
 export async function askForTargetFolder(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
   return askForFolder({
-    openLabel: "Generate into this package",
+    openLabel: "Generate REST client into this package",
     defaultUri: defaultUri,
   });
 }
