@@ -5,6 +5,7 @@ import { promisify } from "util";
 import * as path from "path";
 import * as ncp from "ncp";
 import * as fsExtra from "fs-extra";
+import * as os from "os";
 
 interface DownloadRequestOptions {
   url: string;
@@ -35,22 +36,18 @@ export async function downloadFile(
 
 export const exists = promisify(fs.exists);
 
-const _mkdir = promisify(fs.mkdir);
-export async function mkdir(dir: string): Promise<void> {
+const _mkdtemp = promisify(fs.mkdtemp);
+export async function mkdtemp(dir: string): Promise<string | undefined> {
   if (!(await exists(dir))) {
-    await _mkdir(dir);
+    return await _mkdtemp(dir);
   }
 }
 
 // generates a temp directory in a existing dir and returns the name of the tmp dir
-export async function generateTempDirectory(dir: string): Promise<string> {
-  const randomSuffix = Math.random()
-    .toString(36)
-    .substr(2, 5);
-  const tempDirName = `tmp-${randomSuffix}`;
-  const fullTempDirPath = path.join(dir, tempDirName);
-  await mkdir(fullTempDirPath);
-  return fullTempDirPath;
+export async function generateTempDirectory(): Promise<string | undefined> {
+  const tmpDirPrefix = "vscode-rest-client-generator-";
+  const tmpDir = await mkdtemp(path.join(os.tmpdir(), tmpDirPrefix));
+  return tmpDir;
 }
 
 export const copy = promisify(ncp);
