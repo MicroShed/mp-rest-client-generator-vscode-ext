@@ -43,7 +43,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     const packageName = getPackageName(targetDirectory.fsPath);
 
     // make a tmp directory in the target folder to generate files into
-    tmpDirPath = await fileUtil.generateTempDirectory(targetDirectory.fsPath);
+    tmpDirPath = await fileUtil.generateTempDirectory();
+    if (tmpDirPath === undefined) {
+      console.error("Failed to generate a temporary directory.");
+      return;
+    }
 
     // if they are using a URL download the file to the temp directory
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
@@ -99,7 +103,9 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     );
   } catch (e) {
     console.error(e);
-    vscode.window.showErrorMessage("Failed to generate MicroProfile rest client");
+    vscode.window.showErrorMessage(
+      "Failed to generate MicroProfile Rest Client interface template."
+    );
   } finally {
     // remove the tmp directory after if it exists
     if (tmpDirPath !== undefined && (await fileUtil.exists(tmpDirPath))) {
