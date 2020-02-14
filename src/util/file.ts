@@ -36,15 +36,9 @@ export async function downloadFile(
 
 export const exists = promisify(fs.exists);
 
-const _mkdtemp = promisify(fs.mkdtemp);
-export async function mkdtemp(dir: string): Promise<string | undefined> {
-  if (!(await exists(dir))) {
-    return await _mkdtemp(dir);
-  }
-}
-
+const mkdtemp = promisify(fs.mkdtemp);
 // generates a temp directory in a existing dir and returns the name of the tmp dir
-export async function generateTempDirectory(): Promise<string | undefined> {
+export async function generateTempDirectory(): Promise<string> {
   const tmpDirPrefix = "vscode-rest-client-generator-";
   const tmpDir = await mkdtemp(path.join(os.tmpdir(), tmpDirPrefix));
   return tmpDir;

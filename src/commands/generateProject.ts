@@ -4,7 +4,7 @@ import * as prompts from "../util/vscodePrompts";
 import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH } from "../constants";
 import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
-import { getWorkspaceFolderIfExists, getPackageName } from "../util/workspace";
+import { getWorkspaceFolder } from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
@@ -12,8 +12,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
   // default URI to use when presenting the user a file picker
   // ie. when asking for yaml file or target folder to generate rest client into
-  const defaultFilePickerURI =
-    clickedFileUri != null ? clickedFileUri : getWorkspaceFolderIfExists();
+  const defaultFilePickerURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolder();
 
   try {
     const inputYamlMethod = await prompts.askForYamlInputMethod();
@@ -40,14 +39,13 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
-    const packageName = getPackageName(targetDirectory.fsPath);
+    const packageName = await prompts.askForPackageName(targetDirectory.fsPath);
+    if (packageName === undefined) {
+      return;
+    }
 
     // make a tmp directory in the target folder to generate files into
     tmpDirPath = await fileUtil.generateTempDirectory();
-    if (tmpDirPath === undefined) {
-      console.error("Failed to generate a temporary directory.");
-      return;
-    }
 
     // if they are using a URL download the file to the temp directory
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
@@ -57,8 +55,17 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
         method: "GET",
       };
       const downloadLocation = path.join(tmpDirPath, "openapi.yaml");
-      await fileUtil.downloadFile(requestOptions, downloadLocation);
-      yamlInputFileURI = vscode.Uri.parse(downloadLocation);
+
+      try {
+        await fileUtil.downloadFile(requestOptions, downloadLocation);
+        yamlInputFileURI = vscode.Uri.parse(downloadLocation);
+      } catch (e) {
+        console.error(e);
+        vscode.window.showErrorMessage(
+          `Failed to download yaml file from "${yamlInputURL}" to directory "${downloadLocation}"`
+        );
+        return;
+      }
     }
 
     if (yamlInputFileURI === undefined) {
