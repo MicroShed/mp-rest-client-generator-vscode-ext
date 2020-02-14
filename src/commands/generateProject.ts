@@ -54,13 +54,16 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
         url: yamlInputURL!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
         method: "GET",
       };
+      const downloadLocation = path.join(tmpDirPath, "openapi.yaml");
+
       try {
-        const downloadLocation = path.join(tmpDirPath, "openapi.yaml");
         await fileUtil.downloadFile(requestOptions, downloadLocation);
         yamlInputFileURI = vscode.Uri.parse(downloadLocation);
       } catch (e) {
         console.error(e);
-        vscode.window.showErrorMessage("Failed to download yaml file");
+        vscode.window.showErrorMessage(
+          `Failed to download yaml file from "${yamlInputURL}" to directory "${downloadLocation}"`
+        );
         return;
       }
     }
