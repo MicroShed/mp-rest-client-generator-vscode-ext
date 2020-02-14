@@ -9,6 +9,7 @@ import { getWorkspaceFolderIfExists, getPackageName, generateRestClient } from "
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
   let tmpDirPath: string | undefined;
+  let yamlType: string | undefined;
 
   // default URI to use when presenting the user a file picker
   // ie. when asking for yaml file or target folder to generate rest client into
@@ -22,8 +23,10 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
     if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_FILE) {
       yamlInputFileURI = await prompts.askForYamlFile(defaultFilePickerURI);
+      yamlType = "file";
     } else if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
       yamlInputURL = await prompts.askForYamlURL();
+      yamlType = "url";
     }
 
     // if neither an input file or input URL are specified exit the generator
@@ -95,8 +98,8 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       await generateRestClient(jarCommand);
     } catch (e) {
       if (e.message.includes(SPEC_VALIDATION_EXCEPTION)) {
-        const selection = await vscode.window.showInformationMessage(
-          "The yaml file provided failed the OpenAPI Generator specification validation. Would you like to generate without specification validation?",
+        const selection = await vscode.window.showErrorMessage(
+          `The provided yaml ${yamlType} failed the OpenAPI specification validation. Would you like to generate without specification validation?`,
           ...["Yes", "No"]
         );
         if (selection === "Yes") {
