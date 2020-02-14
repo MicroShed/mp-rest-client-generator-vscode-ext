@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as prompts from "../util/vscodePrompts";
-import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH } from "../constants";
+import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
 import * as fileUtil from "../util/file";
 import * as processUtil from "../util/process";
-import { getWorkspaceFolder } from "../util/workspace";
+import { getWorkspaceFolderIfExists, getPackageName, generateRestClient } from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
@@ -78,7 +78,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     const modelPackageName = packageName !== "" ? `${packageName}.models` : "models";
 
     // execute generator in temp dir
-    const jarCommand =
+    let jarCommand =
       "java -jar " +
       GENERATOR_JAR_PATH +
       " generate " +
@@ -91,14 +91,22 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       apiPackageName +
       " --model-package " +
       modelPackageName;
-    // run the generator command with a "progress" dialog
-    await vscode.window.withProgress(
-      {
-        location: vscode.ProgressLocation.Notification,
-        title: "Generating the MicroProfile Rest Client interface template...",
-      },
-      () => processUtil.exec(jarCommand)
-    );
+    try {
+      await generateRestClient(jarCommand);
+    } catch (e) {
+      if (e.message.includes(SPEC_VALIDATION_EXCEPTION)) {
+        const selection = await vscode.window.showInformationMessage(
+          "The yaml file provided failed the OpenAPI Generator specification validation. Would you like to generate without specification validation?",
+          ...["Yes", "No"]
+        );
+        if (selection === "Yes") {
+          jarCommand += " --skip-validate-spec";
+          await generateRestClient(jarCommand);
+        } else {
+          return;
+        }
+      }
+    }
 
     const packagePath = packageName.replace(/\./g, path.sep);
     const generatedRestClientPath = path.resolve(tmpDirPath, "src", "main", "java", packagePath);
