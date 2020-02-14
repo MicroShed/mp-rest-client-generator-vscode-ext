@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { getDefaultPackageName } from "./workspace";
 import { INPUT_YAML_OPTIONS } from "../constants";
 
 async function askForFile(
@@ -54,7 +55,7 @@ export async function askForYamlFile(defaultUri?: vscode.Uri): Promise<vscode.Ur
 export async function askForYamlURL(): Promise<string | undefined> {
   return vscode.window.showInputBox({
     placeHolder: "e.g. http://www.example.com/openapi.yaml",
-    prompt: "Input yaml path for your project",
+    prompt: "Generate from yaml file at this URL",
     ignoreFocusOut: true,
   });
 }
@@ -63,5 +64,24 @@ export async function askForTargetFolder(defaultUri?: vscode.Uri): Promise<vscod
   return askForFolder({
     openLabel: "Generate REST client into this package",
     defaultUri: defaultUri,
+  });
+}
+
+export async function askForPackageName(targetDir: string): Promise<string | undefined> {
+  const defaultPackageName = getDefaultPackageName(targetDir);
+  const packageNameRegex = /^[a-z][a-z0-9_]*(\.[a-z0-9_]+)*$/; // used to validate the package name
+  return await vscode.window.showInputBox({
+    placeHolder: "e.g. com.example",
+    prompt: "Input package name for your project",
+    ignoreFocusOut: true,
+    validateInput: (value: string) => {
+      // allow no package name or a valid java package name
+      if (value !== "" && packageNameRegex.test(value) === false) {
+        return "Invalid package name";
+      } else {
+        return null;
+      }
+    },
+    value: defaultPackageName,
   });
 }

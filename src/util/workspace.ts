@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-export function getWorkspaceFolderIfExists(): vscode.Uri | undefined {
+/**
+ * Gets the first open workspace folder
+ * @returns First open workspace folder if one exists. `undefined` if there is no open workspace.
+ */
+export function getWorkspaceFolder(): vscode.Uri | undefined {
   const workspaceFolders = vscode.workspace.workspaceFolders;
   if (workspaceFolders !== undefined && workspaceFolders.length > 0) {
     return workspaceFolders[0].uri;
@@ -9,14 +13,17 @@ export function getWorkspaceFolderIfExists(): vscode.Uri | undefined {
   return undefined;
 }
 
-// package name is all directories after the /java/ dir, otherwise empty
-export function getPackageName(srcDir: string): string {
-  let index = srcDir.toLowerCase().indexOf(path.sep + "java" + path.sep);
+/**
+ * @param targetDir target directory to generate open api client into
+ * @returns java package name if it can compute one or the empty string
+ */
+export function getDefaultPackageName(targetDir: string): string {
+  let index = targetDir.toLowerCase().indexOf(path.sep + "java" + path.sep);
   let defaultPackageName = "";
   if (index > -1) {
     // use everything after the "/java/" to be the package name
     index = index + 6;
-    defaultPackageName = srcDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
+    defaultPackageName = targetDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
   }
   return defaultPackageName;
 }
