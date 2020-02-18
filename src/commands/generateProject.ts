@@ -97,9 +97,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       await generateRestClient(jarCommand);
     } catch (e) {
       console.error(e);
-      if (!e.message.includes(jarCommand)) {
-        return; // show generic error message
-      } else {
+      if (e.message.includes(jarCommand)) {
         // get error description returned from executing jar command
         let err = e.message.trim().split(jarCommand);
         err = err[1].trim().split("\n")[0];
@@ -122,6 +120,10 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
           );
           return;
         }
+      } else {
+        vscode.window.showErrorMessage(
+          "Failed to generate MicroProfile Rest Client interface template."
+        );
       }
     }
 
