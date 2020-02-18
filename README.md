@@ -3,7 +3,7 @@
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/MicroProfile-Community.mp-rest-client-generator-vscode-ext.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
 [![Build Status](https://travis-ci.org/MicroShed/mp-starter-vscode-ext.svg?branch=master)](https://travis-ci.org/MicroShed/mp-rest-client-generator-vscode-ext)
 
-The MicroProfile Rest Client Generator Extension provides support for generating a [MicroProfile](https://microprofile.io/) Rest Client interface template from an OpenAPI `.yaml` file. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. This extension is hosted under the MicroShed organization. Learn more about MicroProfile Rest Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
+The MicroProfile Rest Client Generator Extension provides support for generating a [MicroProfile](https://microprofile.io/) Rest Client interface template from an OpenAPI `.yaml` file. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. The code for this extension is hosted under the MicroShed organization on GitHub. Learn more about MicroProfile Rest Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
 
 ![Open Liberty Tools Extension](images/RestClientExtension.png)
 
