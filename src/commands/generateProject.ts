@@ -96,17 +96,35 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     try {
       await generateRestClient(jarCommand);
     } catch (e) {
-      if (e.message.includes(SPEC_VALIDATION_EXCEPTION)) {
-        const selection = await vscode.window.showErrorMessage(
-          `The provided yaml ${yamlType} failed the OpenAPI specification validation. Would you like to generate without specification validation?`,
-          ...["Yes", "No"]
-        );
-        if (selection === "Yes") {
-          jarCommand += " --skip-validate-spec";
-          await generateRestClient(jarCommand);
+      console.error(e);
+      if (e.message.includes(jarCommand)) {
+        // get error description returned from executing jar command
+        let err = e.message.trim().split(jarCommand);
+        err = err[1].trim().split("\n")[0];
+
+        // catch spec validation error
+        if (err.includes(SPEC_VALIDATION_EXCEPTION)) {
+          const selection = await vscode.window.showErrorMessage(
+            `The provided yaml ${yamlType} failed the OpenAPI specification validation. Would you like to generate without specification validation?`,
+            ...["Yes", "No"]
+          );
+          if (selection === "Yes") {
+            jarCommand += " --skip-validate-spec";
+            await generateRestClient(jarCommand);
+          } else {
+            return;
+          }
         } else {
+          vscode.window.showErrorMessage(
+            `Failed to generate a MicroProfile Rest Client interface from the provided yaml ${yamlType}: ${err}`
+          );
           return;
         }
+      } else {
+        vscode.window.showErrorMessage(
+          "Failed to generate MicroProfile Rest Client interface template."
+        );
+        return;
       }
     }
 
