@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as path from "path";
+import * as processUtil from "../util/process";
 
 /**
  * Gets the first open workspace folder
@@ -26,4 +27,14 @@ export function getDefaultPackageName(targetDir: string): string {
     defaultPackageName = targetDir.substring(index).replace(new RegExp("\\" + path.sep, "g"), ".");
   }
   return defaultPackageName;
+}
+
+export async function generateRestClient(jarCommand: string): Promise<void> {
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: "Generating the MicroProfile Rest Client interface template...",
+    },
+    () => processUtil.exec(jarCommand)
+  );
 }
