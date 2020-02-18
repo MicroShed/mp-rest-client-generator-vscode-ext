@@ -124,6 +124,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
         vscode.window.showErrorMessage(
           "Failed to generate MicroProfile Rest Client interface template."
         );
+        return;
       }
     }
 
