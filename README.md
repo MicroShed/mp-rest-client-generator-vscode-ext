@@ -3,14 +3,14 @@
 [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/MicroProfile-Community.mp-rest-client-generator-vscode-ext.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
 [![Build Status](https://travis-ci.org/MicroShed/mp-starter-vscode-ext.svg?branch=master)](https://travis-ci.org/MicroShed/mp-rest-client-generator-vscode-ext)
 
-The MicroProfile Rest Client Generator Extension provides support for generating a [MicroProfile](https://microprofile.io/) Rest Client interface template from an [OpenAPI](https://github.com/OAI/OpenAPI-Specification) document. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. The code for this extension is hosted under the MicroShed organization on GitHub. Learn more about MicroProfile Rest Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
+The MicroProfile REST Client Generator Extension provides support for generating a [MicroProfile](https://microprofile.io/) REST Client interface template from an [OpenAPI](https://github.com/OAI/OpenAPI-Specification) document. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. The code for this extension is hosted under the MicroShed organization on GitHub. Learn more about MicroProfile REST Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
 
 ![Open Liberty Tools Extension](images/RestClientExtension.png)
 
 ## Quick Start
 
 - Install the extension
-- Launch the VS Code command palette `(View -> Command Palette...)`, then select `MicroProfile: Generate a MicroProfile Rest Client` to run the extension
+- Launch the VS Code command palette `(View -> Command Palette...)`, then select `MicroProfile: Generate a MicroProfile REST Client` to run the extension
 
 ## Input
 
@@ -24,7 +24,7 @@ The extension will generate `models` and `apis` folders into the specified direc
 
 ## Contributing
 
-Contributions to the MicroProfile Rest Client Generator extension are welcome!
+Contributions to the MicroProfile REST Client Generator extension are welcome!
 
 Our [CONTRIBUTING](CONTRIBUTING.md) document contains details for submitting pull requests.
 

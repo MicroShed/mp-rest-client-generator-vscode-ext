@@ -11,7 +11,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   let inputType: string | undefined;
 
   // default URI to use when presenting the user a file picker
-  // ie. when asking for file or target folder to generate rest client into
+  // ie. when asking for file or target folder to generate REST client into
   const defaultFilePickerURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolder();
 
   try {
@@ -33,7 +33,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
-    // ask for a folder to generate rest client into
+    // ask for a folder to generate REST client into
     // use the fileURI clicked on by the user as the default if
     // the command was triggered from the file explorer
     const targetDirectory = await prompts.askForTargetFolder(defaultFilePickerURI);
@@ -116,12 +116,12 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
           }
         } else {
           vscode.window.showErrorMessage(
-            `Failed to generate a MicroProfile Rest Client interface from the provided ${inputType}: ${err}`
+            `Failed to generate a MicroProfile REST Client interface from the provided ${inputType}: ${err}`
           );
           return;
         }
       } else {
-        throw new Error("Failed to generate a MicroProfile Rest Client interface template");
+        throw new Error("Failed to generate a MicroProfile REST Client interface template");
       }
     }
 
@@ -131,12 +131,12 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     // copy the api/models folder from the generated directory into the target directory
     await fileUtil.copy(generatedRestClientPath, targetDirectory.fsPath);
     vscode.window.showInformationMessage(
-      "Successfully generated a MicroProfile Rest Client interface template."
+      "Successfully generated a MicroProfile REST Client interface template."
     );
   } catch (e) {
     console.error(e);
     vscode.window.showErrorMessage(
-      "Failed to generate a MicroProfile Rest Client interface template."
+      "Failed to generate a MicroProfile REST Client interface template."
     );
   } finally {
     // remove the tmp directory after if it exists
