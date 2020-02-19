@@ -1,7 +1,7 @@
 import * as path from "path";
 
-export const INPUT_YAML_OPTIONS = {
-  FROM_FILE: "Generate from a .yaml file",
+export const INPUT_OPTIONS = {
+  FROM_FILE: "Generate from an OpenAPI file",
   FROM_URL: "Generate from a url",
 };
 

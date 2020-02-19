@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getDefaultPackageName } from "./workspace";
-import { INPUT_YAML_OPTIONS } from "../constants";
+import { INPUT_OPTIONS } from "../constants";
 
 async function askForFile(
   customOptions?: vscode.OpenDialogOptions
@@ -38,31 +38,31 @@ async function askForFolder(
   return undefined;
 }
 
-export async function askForYamlInputMethod(): Promise<string | undefined> {
-  return vscode.window.showQuickPick([INPUT_YAML_OPTIONS.FROM_FILE, INPUT_YAML_OPTIONS.FROM_URL], {
+export async function askForInputMethod(): Promise<string | undefined> {
+  return vscode.window.showQuickPick([INPUT_OPTIONS.FROM_FILE, INPUT_OPTIONS.FROM_URL], {
     ignoreFocusOut: true,
-    placeHolder: "Select a method of providing a yaml file.",
+    placeHolder: "Select a method of providing an OpenAPI file.",
   });
 }
 
-export async function askForYamlFile(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
+export async function askForInputFile(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
   return askForFile({
     openLabel: "Generate from this file",
     defaultUri: defaultUri,
   });
 }
 
-export async function askForYamlURL(): Promise<string | undefined> {
+export async function askForInputURL(): Promise<string | undefined> {
   return vscode.window.showInputBox({
     placeHolder: "e.g. http://www.example.com/openapi.yaml",
-    prompt: "Generate from yaml file at this URL",
+    prompt: "Generate from the file at this URL",
     ignoreFocusOut: true,
   });
 }
 
 export async function askForTargetFolder(defaultUri?: vscode.Uri): Promise<vscode.Uri | undefined> {
   return askForFolder({
-    openLabel: "Generate REST client into this package",
+    openLabel: "Generate REST Client into this package",
     defaultUri: defaultUri,
   });
 }

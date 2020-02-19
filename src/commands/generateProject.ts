@@ -1,35 +1,35 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as prompts from "../util/vscodePrompts";
-import { INPUT_YAML_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
+import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
 import * as fileUtil from "../util/file";
 import { getWorkspaceFolder, generateRestClient } from "../util/workspace";
 
 export async function generateProject(clickedFileUri: vscode.Uri | undefined): Promise<void> {
   // extension uses a tmp directory to download / generate files into
   let tmpDirPath: string | undefined;
-  let yamlType: string | undefined;
+  let inputType: string | undefined;
 
   // default URI to use when presenting the user a file picker
-  // ie. when asking for yaml file or target folder to generate rest client into
+  // ie. when asking for file or target folder to generate rest client into
   const defaultFilePickerURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolder();
 
   try {
-    const inputYamlMethod = await prompts.askForYamlInputMethod();
+    const inputMethod = await prompts.askForInputMethod();
 
-    let yamlInputFileURI: vscode.Uri | undefined;
-    let yamlInputURL: string | undefined;
+    let inputFileURI: vscode.Uri | undefined;
+    let inputURL: string | undefined;
 
-    if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_FILE) {
-      yamlInputFileURI = await prompts.askForYamlFile(defaultFilePickerURI);
-      yamlType = "file";
-    } else if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
-      yamlInputURL = await prompts.askForYamlURL();
-      yamlType = "url";
+    if (inputMethod === INPUT_OPTIONS.FROM_FILE) {
+      inputFileURI = await prompts.askForInputFile(defaultFilePickerURI);
+      inputType = "file";
+    } else if (inputMethod === INPUT_OPTIONS.FROM_URL) {
+      inputURL = await prompts.askForInputURL();
+      inputType = "url";
     }
 
     // if neither an input file or input URL are specified exit the generator
-    if (yamlInputFileURI === undefined && yamlInputURL === undefined) {
+    if (inputFileURI === undefined && inputURL === undefined) {
       return;
     }
 
@@ -50,27 +50,27 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     tmpDirPath = await fileUtil.generateTempDirectory();
 
     // if they are using a URL download the file to the temp directory
-    if (inputYamlMethod === INPUT_YAML_OPTIONS.FROM_URL) {
+    if (inputMethod === INPUT_OPTIONS.FROM_URL) {
       const requestOptions = {
-        // yamlInputURL must exist if input method is FROM_URL
-        url: yamlInputURL!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
+        // inputURL must exist if input method is FROM_URL
+        url: inputURL!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
         method: "GET",
       };
       const downloadLocation = path.join(tmpDirPath, "openapi.yaml");
 
       try {
         await fileUtil.downloadFile(requestOptions, downloadLocation);
-        yamlInputFileURI = vscode.Uri.parse(downloadLocation);
+        inputFileURI = vscode.Uri.parse(downloadLocation);
       } catch (e) {
         console.error(e);
         vscode.window.showErrorMessage(
-          `Failed to download yaml file from "${yamlInputURL}" to directory "${downloadLocation}"`
+          `Failed to download file from "${inputURL}" to directory "${downloadLocation}"`
         );
         return;
       }
     }
 
-    if (yamlInputFileURI === undefined) {
+    if (inputFileURI === undefined) {
       return;
     }
 
@@ -86,7 +86,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       " generate " +
       "-p useMultipart=false  " +
       "-i " +
-      yamlInputFileURI.fsPath +
+      inputFileURI.fsPath +
       " -g java --library microprofile -o " +
       tmpDirPath +
       " --api-package " +
@@ -105,7 +105,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
         // catch spec validation error
         if (err.includes(SPEC_VALIDATION_EXCEPTION)) {
           const selection = await vscode.window.showErrorMessage(
-            `The provided yaml ${yamlType} failed the OpenAPI specification validation. Would you like to generate without specification validation?`,
+            `The provided ${inputType} failed the OpenAPI specification validation. Would you like to generate without specification validation?`,
             ...["Yes", "No"]
           );
           if (selection === "Yes") {
@@ -116,15 +116,12 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
           }
         } else {
           vscode.window.showErrorMessage(
-            `Failed to generate a MicroProfile Rest Client interface from the provided yaml ${yamlType}: ${err}`
+            `Failed to generate a MicroProfile Rest Client interface from the provided ${inputType}: ${err}`
           );
           return;
         }
       } else {
-        vscode.window.showErrorMessage(
-          "Failed to generate MicroProfile Rest Client interface template."
-        );
-        return;
+        throw new Error("Failed to generate a MicroProfile Rest Client interface template");
       }
     }
 
@@ -139,7 +136,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   } catch (e) {
     console.error(e);
     vscode.window.showErrorMessage(
-      "Failed to generate MicroProfile Rest Client interface template."
+      "Failed to generate a MicroProfile Rest Client interface template."
     );
   } finally {
     // remove the tmp directory after if it exists
