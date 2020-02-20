@@ -33,7 +33,7 @@ export async function generateRestClient(jarCommand: string): Promise<void> {
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Notification,
-      title: "Generating the MicroProfile Rest Client interface template...",
+      title: "Generating the MicroProfile REST Client interface template...",
     },
     () => processUtil.exec(jarCommand)
   );
