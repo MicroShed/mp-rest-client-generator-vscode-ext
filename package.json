@@ -66,7 +66,7 @@
     "@types/chai": "^4.2.8",
     "@types/fs-extra": "^8.0.1",
     "@types/glob": "^7.1.1",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.2",
     "@types/ncp": "^2.0.3",
     "@types/node": "^10.12.21",
     "@types/node-fetch": "^2.5.4",
@@ -78,7 +78,7 @@
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
     "glob": "^7.1.5",
-    "mocha": "^6.2.2",
+    "mocha": "^7.1.1",
     "prettier": "^1.19.1",
     "tslint": "^5.8.0",
     "typescript": "^3.1.4",
@@ -86,7 +86,6 @@
   },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "^1.0.10-4.2.3",
-    "extract-zip": "^1.6.7",
     "fs-extra": "^8.1.0",
     "ncp": "^2.0.0",
     "node-fetch": "^2.6.0"
