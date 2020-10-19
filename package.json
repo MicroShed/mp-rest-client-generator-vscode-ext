@@ -1,8 +1,8 @@
 {
   "name": "mp-rest-client-generator-vscode-ext",
-  "displayName": "MicroProfile REST Client Generator",
+  "displayName": "Generator for MicroProfile Rest Client",
   "description": "Generate a Java MicroProfile REST Client using the OpenAPI Generator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "MicroProfile-Community",
   "license": "EPL-2.0",
   "preview": true,
