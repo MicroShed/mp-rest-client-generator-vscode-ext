@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -10,7 +10,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as prompts from "../util/vscodePrompts";
-import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
+import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION, LIB_PATH } from "../constants";
 import * as fileUtil from "../util/file";
 import { getWorkspaceFolder, generateRestClient } from "../util/workspace";
 
@@ -21,9 +21,18 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
   // default URI to use when presenting the user a file picker
   // ie. when asking for file or target folder to generate REST client into
-  const defaultFilePickerURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolder();
+  const defaultFilePickerURI = clickedFileUri !== null ? clickedFileUri : getWorkspaceFolder();
 
   try {
+
+    try {
+      await fileUtil.downloadGeneratorCli();
+    } catch (e) {
+      let errMsg = e instanceof Error ? e.message : new String(e);
+      vscode.window.showErrorMessage(`${errMsg}`);
+      return;
+    }
+
     const inputMethod = await prompts.askForInputMethod();
 
     let inputFileURI: vscode.Uri | undefined;
@@ -83,6 +92,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
+    const mpRestClientVersion = await prompts.askForMPRestClientVersion();
+    if (mpRestClientVersion === undefined) {
+      return;
+    }
+
     // add .api /.models to package name or just use package api package models
     // if no package name was provided
     const apiPackageName = packageName !== "" ? `${packageName}.api` : "api";
@@ -93,7 +107,9 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       "java -jar " +
       GENERATOR_JAR_PATH +
       " generate " +
-      "-p useMultipart=false  " +
+      "-p useMultipart=false " +
+      "-p microprofileRestClientVersion=" + mpRestClientVersion + " " +
+      "-p disableMultipart=true " +
       "-i " +
       inputFileURI.fsPath +
       " -g java --library microprofile -o " +
@@ -106,10 +122,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       await generateRestClient(jarCommand);
     } catch (e) {
       console.error(e);
-      if (e.message.includes(jarCommand)) {
+      let errMsg = e instanceof Error ? e.message : new String(e);
+      if (errMsg.includes(jarCommand)) {
         // get error description returned from executing jar command
-        let err = e.message.trim().split(jarCommand);
-        err = err[1].trim().split("\n")[0];
+        let errArray = errMsg.trim().split(jarCommand);
+        let err = errArray[1].trim().split("\n")[0];
 
         // catch spec validation error
         if (err.includes(SPEC_VALIDATION_EXCEPTION)) {

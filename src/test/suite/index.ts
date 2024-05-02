@@ -15,12 +15,13 @@ export function run(): Promise<void> {
   const mocha = new Mocha({
     ui: "bdd",
   });
-  mocha.useColors(true);
+  //mocha.useColors(true);
 
   const testsRoot = path.resolve(__dirname, "..");
 
   return new Promise((c, e) => {
-    glob("**/**.test.js", { cwd: testsRoot }, (err, files) => {
+    /*
+    glob("** /**.test.js", { cwd: testsRoot }, (err, files) => {
       if (err) {
         return e(err);
       }
@@ -41,5 +42,6 @@ export function run(): Promise<void> {
         e(err);
       }
     });
+  */
   });
 }

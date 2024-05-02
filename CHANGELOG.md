@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to the Generator for MicroProfile Rest Client extension will be documented below.
 
+## 0.2.0
+- Support different versions of MicroProfile Rest Client: 3.0, 2.0, or 1.4.1
+
 ## 0.1.2
 - Rename to Generator for MicroProfile Rest Client
 - Update node-fetch dependency version

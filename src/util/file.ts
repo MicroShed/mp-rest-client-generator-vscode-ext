@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -9,12 +9,12 @@
  */
 import fetch from "node-fetch";
 import { pipeline } from "stream";
-import * as fs from "fs";
 import { promisify } from "util";
-import * as path from "path";
-import * as ncp from "ncp";
+import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 import * as os from "os";
+import * as path from "path";
+import { LIB_PATH, GENERATOR_JAR_PATH, GENERATOR_JAR_URL } from "../constants";
 
 interface DownloadRequestOptions {
   url: string;
@@ -32,6 +32,9 @@ export async function downloadFile(
   }
 
   return new Promise((resolve, reject) => {
+    if (res.body === null) {
+      throw new Error("res.body is null");
+    }
     // create a pipeline that pipes the response to the download location
     pipeline(res.body, fs.createWriteStream(downloadLocation), err => {
       if (err) {
@@ -53,6 +56,24 @@ export async function generateTempDirectory(): Promise<string> {
   return tmpDir;
 }
 
-export const copy = promisify(ncp);
+export function copy(src: string, dest: string) {
+  fsExtra.copySync(src, dest);
+}
 
 export const deleteDirectory = promisify(fsExtra.remove);
+
+export async function downloadGeneratorCli() : Promise<void> {
+  if (!fs.existsSync(GENERATOR_JAR_PATH)) {
+    if (!fs.existsSync(LIB_PATH)) {
+      fsExtra.mkdirSync(LIB_PATH);
+    }
+    const requestOptions = {
+      url: GENERATOR_JAR_URL,
+      method: "GET",
+    };
+    await downloadFile(requestOptions, GENERATOR_JAR_PATH);
+    if (!fs.existsSync(GENERATOR_JAR_PATH)) {
+      throw new Error("Unable to download the openapi-generator-cli jar file.");
+    }
+  }
+}
