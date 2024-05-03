@@ -156,9 +156,10 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
     // copy the api/models folder from the generated directory into the target directory
     await fileUtil.copy(generatedRestClientPath, targetDirectory.fsPath);
-    vscode.window.showInformationMessage(
-      "Successfully generated a MicroProfile REST Client interface template."
+    await vscode.window.showInformationMessage(
+      "Successfully generated a MicroProfile REST Client interface template.", ...["OK"]
     );
+    vscode.commands.executeCommand("workbench.files.action.refreshFilesExplorer");
   } catch (e) {
     console.error(e);
     vscode.window.showErrorMessage(
