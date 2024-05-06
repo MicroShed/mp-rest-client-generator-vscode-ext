@@ -63,17 +63,15 @@ export function copy(src: string, dest: string) {
 export const deleteDirectory = promisify(fsExtra.remove);
 
 export async function downloadGeneratorCli() : Promise<void> {
+  if (!fs.existsSync(LIB_PATH)) {
+    fsExtra.mkdirSync(LIB_PATH);
+  }
+  const requestOptions = {
+    url: GENERATOR_JAR_URL,
+    method: "GET",
+  };
+  await downloadFile(requestOptions, GENERATOR_JAR_PATH);
   if (!fs.existsSync(GENERATOR_JAR_PATH)) {
-    if (!fs.existsSync(LIB_PATH)) {
-      fsExtra.mkdirSync(LIB_PATH);
-    }
-    const requestOptions = {
-      url: GENERATOR_JAR_URL,
-      method: "GET",
-    };
-    await downloadFile(requestOptions, GENERATOR_JAR_PATH);
-    if (!fs.existsSync(GENERATOR_JAR_PATH)) {
-      throw new Error("Unable to download the openapi-generator-cli jar file.");
-    }
+    throw new Error("Unable to download the openapi-generator-cli library.");
   }
 }

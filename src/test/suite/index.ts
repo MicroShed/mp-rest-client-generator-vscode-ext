@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -20,8 +20,8 @@ export function run(): Promise<void> {
   const testsRoot = path.resolve(__dirname, "..");
 
   return new Promise((c, e) => {
-    /*
-    glob("** /**.test.js", { cwd: testsRoot }, (err, files) => {
+    
+    glob("**/**.test.js", { cwd: testsRoot }, (err, files) => {
       if (err) {
         return e(err);
       }
@@ -42,6 +42,5 @@ export function run(): Promise<void> {
         e(err);
       }
     });
-  */
   });
 }
