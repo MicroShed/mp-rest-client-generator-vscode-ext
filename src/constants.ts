@@ -25,6 +25,4 @@ export const GENERATOR_JAR_PATH = path.join(
   "../node_modules/@openapitools/openapi-generator-cli/versions/7.5.0.jar"
 );
 
-export const GENERATOR_JAR_URL = "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.5.0/openapi-generator-cli-7.5.0.jar";
-
 export const SPEC_VALIDATION_EXCEPTION = "SpecValidationException";

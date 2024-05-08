@@ -14,7 +14,6 @@ import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 import * as os from "os";
 import * as path from "path";
-import { GENERATOR_JAR_PATH, GENERATOR_JAR_URL } from "../constants";
 
 interface DownloadRequestOptions {
   url: string;
