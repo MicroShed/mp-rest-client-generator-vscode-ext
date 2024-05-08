@@ -83,7 +83,7 @@
     "minimatch": "5.1.6"
   },
   "dependencies": {
-    "nodejs-file-downloader": "^4.12.1",
+    "@openapitools/openapi-generator-cli": "^2.13.4",
     "fs-extra": "^11.2.0",
     "node-fetch": "2.7.0"
   }

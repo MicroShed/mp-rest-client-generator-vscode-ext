@@ -10,7 +10,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as prompts from "../util/vscodePrompts";
-import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION, LIB_PATH } from "../constants";
+import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
 import * as fs from "fs";
 import * as fileUtil from "../util/file";
 import { getWorkspaceFolder, generateRestClient } from "../util/workspace";
@@ -25,25 +25,6 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   const defaultFilePickerURI = clickedFileUri !== null ? clickedFileUri : getWorkspaceFolder();
 
   try {
-
-    try {
-      if (!fs.existsSync(GENERATOR_JAR_PATH)) {
-        vscode.window.withProgress(
-          {
-            location: vscode.ProgressLocation.Notification,
-            title: 'Downloading the openapi-generator-cli library...',
-            cancellable: false
-          },
-          async (progress) => {
-            fileUtil.downloadGeneratorCli();
-          }
-        )
-      }
-    } catch (e) {
-      let errMsg = e instanceof Error ? e.message : new String(e);
-      vscode.window.showErrorMessage(`${errMsg}`);
-      return;
-    }
 
     const inputMethod = await prompts.askForInputMethod();
 

@@ -14,7 +14,7 @@ import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 import * as os from "os";
 import * as path from "path";
-import { LIB_PATH, GENERATOR_JAR_PATH, GENERATOR_JAR_URL } from "../constants";
+import { GENERATOR_JAR_PATH, GENERATOR_JAR_URL } from "../constants";
 
 interface DownloadRequestOptions {
   url: string;
@@ -61,17 +61,3 @@ export function copy(src: string, dest: string) {
 }
 
 export const deleteDirectory = promisify(fsExtra.remove);
-
-export async function downloadGeneratorCli() : Promise<void> {
-  if (!fs.existsSync(LIB_PATH)) {
-    fsExtra.mkdirSync(LIB_PATH);
-  }
-  const requestOptions = {
-    url: GENERATOR_JAR_URL,
-    method: "GET",
-  };
-  await downloadFile(requestOptions, GENERATOR_JAR_PATH);
-  if (!fs.existsSync(GENERATOR_JAR_PATH)) {
-    throw new Error("Unable to download the openapi-generator-cli library.");
-  }
-}

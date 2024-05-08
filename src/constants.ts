@@ -20,10 +20,9 @@ export const MP_REST_CLIENT_VERSION = {
   VERSION_141: "1.4.1"
 };
 
-export const LIB_PATH = path.join(__dirname, "lib");
-
 export const GENERATOR_JAR_PATH = path.join(
-  LIB_PATH, "openapi-generator-cli-7.5.0.jar"
+  __dirname,
+  "../node_modules/@openapitools/openapi-generator-cli/versions/7.5.0.jar"
 );
 
 export const GENERATOR_JAR_URL = "https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.5.0/openapi-generator-cli-7.5.0.jar";

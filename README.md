@@ -30,7 +30,7 @@ To build and run the extension locally:
 2. Clone your fork: `git clone git@github.com:{your-username}/mp-rest-client-generator-vscode-ext.git`
 3. `cd mp-rest-client-generator-vscode-ext`
 4. Create a branch for the issue you are going to work on: `git checkout -b branch-name-for-your-issue`
-5. Install dependencies: `npm install`
+5. Install dependencies: `npm install` and `npx openapi-generator-cli version`
 6. Run the extension in VS Code by selecting `Run Extension` from the debug panel or by pressing `F5`
 
    Alternatively, build a `.vsix` file:
