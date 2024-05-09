@@ -62,20 +62,20 @@ export function copy(src: string, dest: string) {
 
 export const deleteDirectory = promisify(fsExtra.remove);
 
-export function getJava(): string {
-  const config = workspace.getConfiguration();
-  let javaHome = config.get<string>("xml.java.home") ;
-  if (!javaHome) {
-    javaHome = process.env.JDK_HOME;
-    if (!javaHome) {
-      javaHome = process.env.JAVA_HOME;
-    }
-  }
-  if (javaHome) {
-    let java = path.join(javaHome, "bin/java");
+function javaExist(javaPath: string | undefined) : string | undefined {
+  if (javaPath) {
+    let java = path.join(javaPath, "bin/java");
     if (fs.existsSync(java)) {
       return java;
     }
   }
-  return "java"
+  return undefined;
+}
+
+export function getJava(): string {
+  const config = workspace.getConfiguration();
+  return javaExist(config.get<string>("xml.java.home")) ||
+    javaExist(process.env.JDK_HOME) ||
+    javaExist(process.env.JAVA_HOME) ||
+    "java";
 }
