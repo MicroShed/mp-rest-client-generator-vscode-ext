@@ -10,6 +10,7 @@
 import fetch from "node-fetch";
 import { pipeline } from "stream";
 import { promisify } from "util";
+import { workspace } from "vscode";
 import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 import * as os from "os";
@@ -60,3 +61,21 @@ export function copy(src: string, dest: string) {
 }
 
 export const deleteDirectory = promisify(fsExtra.remove);
+
+export function getJava(): string {
+  const config = workspace.getConfiguration();
+  let javaHome = config.get<string>("xml.java.home") ;
+  if (!javaHome) {
+    javaHome = process.env.JDK_HOME;
+    if (!javaHome) {
+      javaHome = process.env.JAVA_HOME;
+    }
+  }
+  if (javaHome) {
+    let java = path.join(javaHome, "bin/java");
+    if (fs.existsSync(java)) {
+      return java;
+    }
+  }
+  return "java"
+}

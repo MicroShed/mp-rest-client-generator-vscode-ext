@@ -11,7 +11,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as prompts from "../util/vscodePrompts";
 import { INPUT_OPTIONS, GENERATOR_JAR_PATH, SPEC_VALIDATION_EXCEPTION } from "../constants";
-import * as fs from "fs";
 import * as fileUtil from "../util/file";
 import { getWorkspaceFolder, generateRestClient } from "../util/workspace";
 
@@ -25,7 +24,6 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
   const defaultFilePickerURI = clickedFileUri !== null ? clickedFileUri : getWorkspaceFolder();
 
   try {
-
     const inputMethod = await prompts.askForInputMethod();
 
     let inputFileURI: vscode.Uri | undefined;
@@ -96,8 +94,8 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
     const modelPackageName = packageName !== "" ? `${packageName}.models` : "models";
 
     // execute generator in temp dir
-    let jarCommand =
-      "java -jar " +
+    let jarCommand = fileUtil.getJava() +
+      " -jar " +
       GENERATOR_JAR_PATH +
       " generate " +
       "-p useMultipart=false " +
@@ -134,13 +132,16 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
             return;
           }
         } else {
-          vscode.window.showErrorMessage(
+          await vscode.window.showErrorMessage(
             `Failed to generate a MicroProfile REST Client interface from the provided ${inputType}: ${err}`
           );
           return;
         }
       } else {
-        throw new Error("Failed to generate a MicroProfile REST Client interface template");
+        await vscode.window.showErrorMessage(
+          "Failed to generate a MicroProfile REST Client interface template"
+        );
+        return;
       }
     }
 
