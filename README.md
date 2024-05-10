@@ -15,6 +15,7 @@ The extension prompts for the following parameters:
 1. Path or url to an OpenAPI document
 2. `src` directory of project to generate into
 3. Package name
+4. MicroProfile Rest client version
 
 The extension will generate `models` and `apis` folders into the specified directory. The package name will be auto-filled based on the directory generated into.
 
