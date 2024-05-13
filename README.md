@@ -1,6 +1,6 @@
 # Generator for MicroProfile Rest Client
 
-[![Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/Open-Liberty.liberty-dev-vscode-ext?style=for-the-badge&label=VS%20Market "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
+[![Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/MicroProfile-Community.mp-rest-client-generator-vscode-ext?style=for-the-badge&label=VS%20Market "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
 [![License](https://img.shields.io/github/license/MicroShed/mp-rest-client-generator-vscode-ext?style=for-the-badge&logo=eclipse)](https://www.eclipse.org/legal/epl-2.0/)
 
 The Generator for MicroProfile Rest Client extension provides support for generating a [MicroProfile](https://microprofile.io/) REST Client interface template from an [OpenAPI](https://github.com/OAI/OpenAPI-Specification) document in Visual Studio Code. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. The code for this extension is hosted under the MicroShed organization on GitHub. Learn more about MicroProfile Rest Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
