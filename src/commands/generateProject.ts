@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -21,7 +21,7 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
   // default URI to use when presenting the user a file picker
   // ie. when asking for file or target folder to generate REST client into
-  const defaultFilePickerURI = clickedFileUri != null ? clickedFileUri : getWorkspaceFolder();
+  const defaultFilePickerURI = clickedFileUri !== null ? clickedFileUri : getWorkspaceFolder();
 
   try {
     const inputMethod = await prompts.askForInputMethod();
@@ -83,17 +83,24 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       return;
     }
 
+    const mpRestClientVersion = await prompts.askForMPRestClientVersion();
+    if (mpRestClientVersion === undefined) {
+      return;
+    }
+
     // add .api /.models to package name or just use package api package models
     // if no package name was provided
     const apiPackageName = packageName !== "" ? `${packageName}.api` : "api";
     const modelPackageName = packageName !== "" ? `${packageName}.models` : "models";
 
     // execute generator in temp dir
-    let jarCommand =
-      "java -jar " +
+    let jarCommand = fileUtil.getJava() +
+      " -jar " +
       GENERATOR_JAR_PATH +
       " generate " +
-      "-p useMultipart=false  " +
+      "-p useMultipart=false " +
+      "-p microprofileRestClientVersion=" + mpRestClientVersion + " " +
+      "-p disableMultipart=true " +
       "-i " +
       inputFileURI.fsPath +
       " -g java --library microprofile -o " +
@@ -106,10 +113,11 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
       await generateRestClient(jarCommand);
     } catch (e) {
       console.error(e);
-      if (e.message.includes(jarCommand)) {
+      let errMsg = e instanceof Error ? e.message : new String(e);
+      if (errMsg.includes(jarCommand)) {
         // get error description returned from executing jar command
-        let err = e.message.trim().split(jarCommand);
-        err = err[1].trim().split("\n")[0];
+        let errArray = errMsg.trim().split(jarCommand);
+        let err = errArray[1].trim().split("\n")[0];
 
         // catch spec validation error
         if (err.includes(SPEC_VALIDATION_EXCEPTION)) {
@@ -124,13 +132,16 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
             return;
           }
         } else {
-          vscode.window.showErrorMessage(
+          await vscode.window.showErrorMessage(
             `Failed to generate a MicroProfile REST Client interface from the provided ${inputType}: ${err}`
           );
           return;
         }
       } else {
-        throw new Error("Failed to generate a MicroProfile REST Client interface template");
+        await vscode.window.showErrorMessage(
+          "Failed to generate a MicroProfile REST Client interface template"
+        );
+        return;
       }
     }
 
@@ -139,9 +150,10 @@ export async function generateProject(clickedFileUri: vscode.Uri | undefined): P
 
     // copy the api/models folder from the generated directory into the target directory
     await fileUtil.copy(generatedRestClientPath, targetDirectory.fsPath);
-    vscode.window.showInformationMessage(
-      "Successfully generated a MicroProfile REST Client interface template."
+    await vscode.window.showInformationMessage(
+      "Successfully generated a MicroProfile REST Client interface template.", ...["OK"]
     );
+    vscode.commands.executeCommand("workbench.files.action.refreshFilesExplorer");
   } catch (e) {
     console.error(e);
     vscode.window.showErrorMessage(

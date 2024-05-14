@@ -1,7 +1,7 @@
 # Generator for MicroProfile Rest Client
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/MicroProfile-Community.mp-rest-client-generator-vscode-ext.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
-[![Build Status](https://travis-ci.org/MicroShed/mp-starter-vscode-ext.svg?branch=master)](https://travis-ci.org/MicroShed/mp-rest-client-generator-vscode-ext)
+[![Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/MicroProfile-Community.mp-rest-client-generator-vscode-ext?style=for-the-badge&label=VS%20Market "Current Release")](https://marketplace.visualstudio.com/items?itemName=MicroProfile-Community.mp-rest-client-generator-vscode-ext)
+[![License](https://img.shields.io/github/license/MicroShed/mp-rest-client-generator-vscode-ext?style=for-the-badge&logo=eclipse)](https://www.eclipse.org/legal/epl-2.0/)
 
 The Generator for MicroProfile Rest Client extension provides support for generating a [MicroProfile](https://microprofile.io/) REST Client interface template from an [OpenAPI](https://github.com/OAI/OpenAPI-Specification) document in Visual Studio Code. This extension calls the [openapi-generator](https://github.com/OpenAPITools/openapi-generator) to generate `models` and `apis` folders. The code for this extension is hosted under the MicroShed organization on GitHub. Learn more about MicroProfile Rest Client on [GitHub](https://github.com/eclipse/microprofile-rest-client).
 
@@ -19,6 +19,7 @@ The extension prompts for the following parameters:
 1. Path or url to an OpenAPI document
 2. `src` directory of project to generate into
 3. Package name
+4. MicroProfile Rest client version
 
 The extension will generate `models` and `apis` folders into the specified directory. The package name will be auto-filled based on the directory generated into.
 
@@ -34,7 +35,7 @@ To build and run the extension locally:
 2. Clone your fork: `git clone git@github.com:{your-username}/mp-rest-client-generator-vscode-ext.git`
 3. `cd mp-rest-client-generator-vscode-ext`
 4. Create a branch for the issue you are going to work on: `git checkout -b branch-name-for-your-issue`
-5. Install dependencies: `npm install`
+5. Install dependencies: `npm install` and `npx openapi-generator-cli version`
 6. Run the extension in VS Code by selecting `Run Extension` from the debug panel or by pressing `F5`
 
    Alternatively, build a `.vsix` file:

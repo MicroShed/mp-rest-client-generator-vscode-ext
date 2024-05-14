@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -9,7 +9,7 @@
  */
 import * as vscode from "vscode";
 import { getDefaultPackageName } from "./workspace";
-import { INPUT_OPTIONS } from "../constants";
+import { INPUT_OPTIONS, MP_REST_CLIENT_VERSION } from "../constants";
 
 async function askForFile(
   customOptions?: vscode.OpenDialogOptions
@@ -92,5 +92,12 @@ export async function askForPackageName(targetDir: string): Promise<string | und
       }
     },
     value: defaultPackageName,
+  });
+}
+
+export async function askForMPRestClientVersion(): Promise<string | undefined> {
+  return vscode.window.showQuickPick([MP_REST_CLIENT_VERSION.VERSION_30, MP_REST_CLIENT_VERSION.VERSION_20, MP_REST_CLIENT_VERSION.VERSION_141], {
+    ignoreFocusOut: true,
+    placeHolder: "Select the MicroProfle Rest Client version.",
   });
 }

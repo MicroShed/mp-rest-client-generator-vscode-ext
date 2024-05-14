@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2019 IBM Corporation.
+ * Copyright (c) 2019, 2024 IBM Corporation.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -9,12 +9,12 @@
  */
 import fetch from "node-fetch";
 import { pipeline } from "stream";
-import * as fs from "fs";
 import { promisify } from "util";
-import * as path from "path";
-import * as ncp from "ncp";
+import { workspace } from "vscode";
+import * as fs from "fs";
 import * as fsExtra from "fs-extra";
 import * as os from "os";
+import * as path from "path";
 
 interface DownloadRequestOptions {
   url: string;
@@ -32,6 +32,9 @@ export async function downloadFile(
   }
 
   return new Promise((resolve, reject) => {
+    if (res.body === null) {
+      throw new Error("res.body is null");
+    }
     // create a pipeline that pipes the response to the download location
     pipeline(res.body, fs.createWriteStream(downloadLocation), err => {
       if (err) {
@@ -53,6 +56,26 @@ export async function generateTempDirectory(): Promise<string> {
   return tmpDir;
 }
 
-export const copy = promisify(ncp);
+export function copy(src: string, dest: string) {
+  fsExtra.copySync(src, dest);
+}
 
 export const deleteDirectory = promisify(fsExtra.remove);
+
+function javaExist(javaPath: string | undefined) : string | undefined {
+  if (javaPath) {
+    let java = path.join(javaPath, "bin/java");
+    if (fs.existsSync(java)) {
+      return java;
+    }
+  }
+  return undefined;
+}
+
+export function getJava(): string {
+  const config = workspace.getConfiguration();
+  return javaExist(config.get<string>("xml.java.home")) ||
+    javaExist(process.env.JDK_HOME) ||
+    javaExist(process.env.JAVA_HOME) ||
+    "java";
+}
