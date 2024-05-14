@@ -62,9 +62,12 @@ export function copy(src: string, dest: string) {
 
 export const deleteDirectory = promisify(fsExtra.remove);
 
+const isWindows = process.platform.indexOf('win') === 0;
+const JAVA_FILENAME = 'java' + (isWindows?'.exe': '');
 function javaExist(javaPath: string | undefined) : string | undefined {
   if (javaPath) {
-    let java = path.join(javaPath, "bin/java");
+    let java = path.join(javaPath, "bin");
+    java = path.join(java, JAVA_FILENAME);
     if (fs.existsSync(java)) {
       return java;
     }

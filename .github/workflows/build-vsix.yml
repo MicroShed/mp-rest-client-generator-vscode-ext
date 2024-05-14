@@ -1,0 +1,34 @@
+name: Build vsix file
+
+on:
+  workflow_dispatch
+jobs:
+  build-vsix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get files
+        uses: actions/checkout@v4
+      - name: Install npm
+        run: npm install
+      - name: Install openapi-generator-cli
+        run: npx openapi-generator-cli version
+      - name: Test
+        run: |
+          sudo apt-get install dbus-x11 xvfb metacity at-spi2-core
+          export DISPLAY=:88.0
+          Xvfb -ac :88 -screen 0 1280x1024x16 > /dev/null 2>&1 &
+          metacity --sm-disable --replace 2> metacity.err &
+          npm test
+      - name: Install vsce module
+        run: npm install -g @vscode/vsce
+      - name: Package the vsix file
+        run: vsce package
+      - name: Get version
+        run: |
+          export VERSION=`python3 -c 'import json; package=json.load(open("./package.json")); print(package["version"]);'`
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Upload the vsix
+        uses: actions/upload-artifact@v4
+        with:
+          name: mp-rest-client-generator-vscode-ext-${{ env.VERSION }}.vsix
+          path: mp-rest-client-generator-vscode-ext-${{ env.VERSION }}.vsix
