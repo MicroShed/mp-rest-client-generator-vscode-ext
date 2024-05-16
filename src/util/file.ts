@@ -69,7 +69,7 @@ function javaExist(javaPath: string | undefined) : string | undefined {
     let java = path.join(javaPath, "bin");
     java = path.join(java, JAVA_FILENAME);
     if (fs.existsSync(java)) {
-      return java;
+      return '"' + java + '"';
     }
   }
   return undefined;
