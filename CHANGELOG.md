@@ -3,6 +3,7 @@ All notable changes to the Generator for MicroProfile Rest Client extension will
 
 ## 0.2.0
 - Support different versions of MicroProfile Rest Client: 3.0, 2.0, or 1.4.1
+- Use the java command from `xml.java.home` in VSCode setting, environment variable `JDK_HOME`, environment variable `JAVA_HOME`, or in `PATH`
 
 ## 0.1.2
 - Rename to Generator for MicroProfile Rest Client
